@@ -39,25 +39,25 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text #message from user
-    txt = responseAI(text)
+    txt = response_ai(text)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=txt) #reply the same message from user
+        TextSendMessage(text=txt)) #reply the same message from user
 
+def response_ai(recv):
+    recvEnc = urllib.parse.quote(recv)
+    urlStart = "https://chatbot-api.userlocal.jp/api/chat?message="
+    urlEnd = "&key=e102948565f3c106b732"
+    url = urlStart + recvEnc + urlEnd
+    html = urllib.request.urlopen(url).read().decode("utf-8")
+    pattern = re.compile(r"\"([^\"]*)\"")
+    iterator = pattern.finditer(html)
+    i = 0
+    for match in iterator:
+        if i == 3:
+            return (match.group(1))
+        i += 1
 
-def responseAI(recv):
-    recv_enc = urllib.parse.quote(recv)
-#    url_start = "https://chatbot-api.userlocal.jp/api/chat?message="
-#    url_end = "&key=e102948565f3c106b732"
-#    url = url_start + recv_enc + url_end
-#    html = urllib.request.urlopen(url).read().decode("utf-8")
-#    pattern = re.compile(r"\"([^\"]*)\"")
-#    iterator = pattern.finditer(html)
-#    i = 0
-#for match in iterator:
-#        if i == 3:
-#            return (match.group(1))
-#        i += 1
 
 import os
 if __name__ == "__main__":
