@@ -39,7 +39,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text #message from user
-    txt = responseAI(text)
+    txt = responseAI(text.encode('utf-8'))
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt) #reply the same message from user
