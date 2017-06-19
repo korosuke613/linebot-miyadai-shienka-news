@@ -47,19 +47,17 @@ def handle_text_message(event):
 
 def responseAI(recv):
     recv_enc = urllib.parse.quote(recv)
-    url_start = "https://chatbot-api.userlocal.jp/api/chat?message="
-    url_end = "&key=e102948565f3c106b732"
-    url = url_start + recv_enc + url_end
-    print(url)
-    html = urllib.request.urlopen(url).read().decode("utf-8")
-    pattern = re.compile(r"\"([^\"]*)\"")
-    iterator = pattern.finditer(html)
-    i = 0
-    for match in iterator:
-        if i == 3:
-            return (match.group(1))
-
-    i += 1
+#    url_start = "https://chatbot-api.userlocal.jp/api/chat?message="
+#    url_end = "&key=e102948565f3c106b732"
+#    url = url_start + recv_enc + url_end
+#    html = urllib.request.urlopen(url).read().decode("utf-8")
+#    pattern = re.compile(r"\"([^\"]*)\"")
+#    iterator = pattern.finditer(html)
+#    i = 0
+#for match in iterator:
+#        if i == 3:
+#            return (match.group(1))
+#        i += 1
 
 import os
 if __name__ == "__main__":
