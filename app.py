@@ -41,7 +41,7 @@ def callback():
 def handle_text_message(event):
     text = event.message.text #message from user
     if '宮大' in text:
-        txt = miyadaiOshirase()
+        txt = miyadai.miyadaiOshirase()
     else:
         txt = response_ai(text)
     line_bot_api.reply_message(
