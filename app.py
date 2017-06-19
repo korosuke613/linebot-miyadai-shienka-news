@@ -39,10 +39,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text #message from user
-
+    txt = responseAI(text)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=responseAI(text)) #reply the same message from user
+        TextSendMessage(text=txt) #reply the same message from user
 
 
 def responseAI(send):
