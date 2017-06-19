@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import miyadai
 import urllib.request
 import re
 from flask import Flask, request, abort
@@ -40,8 +41,9 @@ def callback():
 def handle_text_message(event):
     text = event.message.text #message from user
     if '宮大' in text:
-        return
-    txt = response_ai(text)
+        txt = miyadaiOshirase()
+    else:
+        txt = response_ai(text)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
