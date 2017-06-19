@@ -59,7 +59,7 @@ def responseAI(recv):
         if i == 3:
             return (match.group(1))
 
-        i += 1
+    i += 1
 
 import os
 if __name__ == "__main__":
