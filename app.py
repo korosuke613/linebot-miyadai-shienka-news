@@ -39,6 +39,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text #message from user
+    if '宮大' in text:
+        return
     txt = response_ai(text)
     line_bot_api.reply_message(
         event.reply_token,
