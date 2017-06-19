@@ -64,6 +64,13 @@ def handle_following_message():
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
 
+@handler.add(JoinEvent)
+def handle_join_message():
+    txt = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=txt)) #reply the same message from user
+
 
 def response_ai(recv):
     recvEnc = urllib.parse.quote(recv)
