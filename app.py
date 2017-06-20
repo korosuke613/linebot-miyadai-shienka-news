@@ -2,7 +2,6 @@
 
 import os
 import miyadai
-from password import *
 import urllib.request
 import re
 from flask import Flask, request, abort
@@ -87,8 +86,7 @@ def handle_leave():
 def response_ai(recv):
     recvEnc = urllib.parse.quote(recv)
     urlStart = "https://chatbot-api.userlocal.jp/api/chat?message="
-    urlEnd = "&key=e102948565f3c106b732"
-    url = urlStart + recvEnc + urlEnd
+    url = urlStart + recvEnc + os.environ.get('CHATBOT_KEY')
     html = urllib.request.urlopen(url).read().decode("utf-8")
     pattern = re.compile(r"\"([^\"]*)\"")
     iterator = pattern.finditer(html)
