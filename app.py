@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import os
 import miyadai
 from password import *
 import urllib.request
@@ -98,6 +99,5 @@ def response_ai(recv):
         i += 1
 
 
-import os
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=os.environ['PORT'])
