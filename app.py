@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import miyadai
-import password import *
+from password import *
 import urllib.request
 import re
 from flask import Flask, request, abort
