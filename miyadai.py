@@ -21,7 +21,7 @@ def miyadaiOshirase():
             for a in li.findAll('a'):
                 if a.string is not None:
                     sendList2.append(a.string.strip())
-                    sendList2.append('http:/' + a.get('href'))
+                    sendList2.append('http://gakumu.of.miyazaki-u.ac.jp' + a.get('href'))
             send = "\n".join(sendList2)
             sendList.append(send)
             sendList.append("\n")
