@@ -36,6 +36,7 @@ if(num != 0):
 	for row in rows:
 		userList.append(row[0])
 	txt = miyadai.miyadaiOshirasePrint(num)
-	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt)
+	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
 	tweet.tweet(txt)
+
 print("num =", num)
