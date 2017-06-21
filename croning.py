@@ -3,6 +3,7 @@
 import os
 import miyadai
 import urllib.request
+import tweet
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -26,13 +27,15 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel 
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
 
 print("croning")
-
+txt = miyadai.miyadaiOshirasePrint(1)
+tweet.tweet(txt)
 num = miyadai.miyadaiOshiraseCheck()
 if(num != 0):
 	rows = miyadai.getUsers()
 	userList = []
 	for row in rows:
 		userList.append(row[0])
-	
-	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + miyadai.miyadaiOshirasePrint(num)))
+	txt = miyadai.miyadaiOshirasePrint(num)
+	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt)
+	tweet.tweet(txt)
 print("num =", num)
