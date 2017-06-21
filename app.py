@@ -58,7 +58,7 @@ def handle_text_message(event):
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
     profile = line_bot_api.get_profile(event.source.user_id)
-    print(event.source.user_id + ", "+ profile.display_name + ", "+ profile.status_message)
+    print(event.source.user_id + profile.display_name + profile.status_message)
     conn = miyadai.connect_psql()
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
