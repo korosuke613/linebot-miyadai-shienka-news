@@ -55,9 +55,6 @@ def handle_text_message(event):
         txt = miyadai.miyadaiOshirasePrint(5)
     elif "help" in text:
         txt = HELP
-    elif "add tweet" in text:
-        tweet.tweet("ああああ")
-        txt = 'ツイートした'
     else:    
         txt = response_ai(text)
     line_bot_api.reply_message(
