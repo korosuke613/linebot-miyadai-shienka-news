@@ -29,6 +29,6 @@ handler = WebhookHandler("ddfc9f05c96e0d56a473112c57b8c316") #Your Channel Secre
 
 print("croning")
 
-line_bot_api.push_message('ddfc9f05c96e0d56a473112c57b8c316', TextSendMessage(text='Hello World!'))
+line_bot_api.push_message('U64a243cd7b86df5261b788685e561a00', TextSendMessage(text='Hello World!'))
 
 	
