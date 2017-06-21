@@ -35,5 +35,4 @@ if(num != 0):
 		userList.append(row[0])
 	
 	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + miyadai.miyadaiOshirasePrint(num)))
-print("num")
-print(num)
+print("num =", num)
