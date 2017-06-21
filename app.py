@@ -56,7 +56,7 @@ def handle_text_message(event):
     elif "help" in text:
         txt = HELP
     elif "add tweet" in text:
-        tweet.tweet("test")
+        tweet.tweet("ああああ")
         txt = 'ツイートした'
     else:    
         txt = response_ai(text)
