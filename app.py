@@ -49,7 +49,7 @@ def callback():
 def handle_text_message(event):
     text = event.message.text #message from user
     if '宮大' in text:
-        txt = miyadai.miyadaiOshirase()
+        txt = miyadai.miyadaiOshirasePrint(5)
     elif "help" in text:
         txt = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
     else:    
