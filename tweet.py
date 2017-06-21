@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import json
 from requests_oauthlib import OAuth1Session
+import os
 
 def tweet(txt):
 	CK =os.environ.get('TWITTER_CK')
