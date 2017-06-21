@@ -5,6 +5,7 @@ import miyadai
 import urllib.request
 import re
 from flask import Flask, request, abort
+import tweet
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -54,6 +55,9 @@ def handle_text_message(event):
         txt = miyadai.miyadaiOshirasePrint(5)
     elif "help" in text:
         txt = HELP
+    elif "add tweet" in text:
+        tweet.tweet("test")
+        txt = 'ツイートした'
     else:    
         txt = response_ai(text)
     line_bot_api.reply_message(

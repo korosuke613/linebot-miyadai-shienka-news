@@ -3,10 +3,10 @@ import json
 from requests_oauthlib import OAuth1Session
 
 def tweet(txt):
-	CK ="q4wnL1G8jdYzdt9o02opRuiIB"
-	CS ="CzYTDMdGEY5AY7xkzWWKSCiPSBYt6FT6Pzz0DQKldquUBCRDWV"
-	AT ="877612557074219015-ylFv6FcdhY6FzGhaa9pUNr5vtu936r1"
-	ATS ="TE6zUxankjYnfeW4K9cOGBu6mKHjb9msir0pwapHRIk9j"
+	CK =os.environ.get('TWITTER_CK')
+	CS =os.environ.get('TWITTER_CS')
+	AT =os.environ.get('TWITTER_AT')
+	ATS =os.environ.get('TWITTER_ATS')
 
 	twitter = OAuth1Session(CK, CS, AT, ATS)
 
