@@ -27,8 +27,6 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel 
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
 
 print("croning")
-txt = miyadai.miyadaiOshirasePrint(1)
-tweet.tweet(txt)
 num = miyadai.miyadaiOshiraseCheck()
 if(num != 0):
 	rows = miyadai.getUsers()

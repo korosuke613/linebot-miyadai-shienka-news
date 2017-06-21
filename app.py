@@ -25,6 +25,8 @@ from linebot.models import (
 
 app = Flask(__name__)
 
+HELP = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "支援課からの新しいお知らせがあったときにこのBOTが教えてくれます" + "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
+
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
 
@@ -51,7 +53,7 @@ def handle_text_message(event):
     if '宮大' in text:
         txt = miyadai.miyadaiOshirasePrint(5)
     elif "help" in text:
-        txt = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
+        txt = HELP
     else:    
         txt = response_ai(text)
     line_bot_api.reply_message(
@@ -74,14 +76,14 @@ def handle_text_message(event):
 
 @handler.add(FollowEvent)
 def handle_follow(event):
-    txt = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
+    txt = HELP
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
 
 @handler.add(JoinEvent)
 def handle_join(event):
-    txt = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非公式のものです。宮崎大学とは一切関係ありません。" +  "\n" + "・'宮大'を送信すると直近5件のお知らせを表示します" + "\n" + "・'help'を送信するとこのメッセージを表示します"
+    txt = HELP
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
