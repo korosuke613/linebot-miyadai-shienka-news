@@ -61,12 +61,12 @@ def handle_text_message(event):
     print(event.source.user_id + ", "+ profile.display_name + ", "+ profile.status_message)
     conn = miyadai.connect_psql()
     cur = conn.cursor()
-    cur.execute("SELECT count(*) FROM users WHERE user_id = '%s' ", (event.source.user_id,))
+    cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
     b = cur.fetchone()
     if b != 0:
         print("ある")
     else:
-        cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)", (event.source.user_id, profile.display_name, profile.status_message, 0))  
+        cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)", (event.source.user_id, profile.display_name, profile.status_message, 0,))  
     conn.commit()
     cur.close()
     conn.close() 
