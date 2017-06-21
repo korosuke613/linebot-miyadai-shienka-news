@@ -18,6 +18,16 @@ def connect_psql():
 	)
 	return conn
 
+def getUsers():
+    conn = connect_psql()
+    cur = conn.cursor()
+    cur.execute("select user_id from users")
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return rows
+
+
 def miyadaiOshiraseInit():
     conn = connect_psql()
     cur = conn.cursor()
@@ -115,4 +125,4 @@ if __name__ == "__main__":
 #    miyadaiOshiraseInit()
     num = miyadaiOshiraseCheck()
     if(num != 0):
-        print(miyadaiOshirasePrunt(num))
+        print(miyadaiOshirasePrint(num))

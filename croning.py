@@ -21,16 +21,19 @@ from linebot.models import (
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent, BeaconEvent
 )
 
-#line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel Access Token
-line_bot_api = LineBotApi("xwRf0z0tymU9AxYSvtQ9doThh2IH95zcaFtQvpE3X6JAZYsVgKhFVa8uoOnC7Pbjx1XNdGfEUvl49aX8XcqVhk9jYnjUv4yJ3eGExx5rIEIwLs/9MN+ZEt/kRyQ8kOXpkPrTdel3h4Val7X2OHMDpAdB04t89/1O/w1cDnyilFU=") #Your Channel Access Token
+line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel Access Token
 
-#handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
-handler = WebhookHandler("ddfc9f05c96e0d56a473112c57b8c316") #Your Channel Secret
+handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
 
 print("croning")
 
 num = miyadai.miyadaiOshiraseCheck()
 if(num != 0):
-    print(miyadai.miyadaiOshirasePrunt(num))
+	rows = miyadai.getUsers()
+	userList = []
+	for row in rows:
+		userList.append(row[0])
+	
+	line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + miyadai.miyadaiOshirasePrint(num)))
 
-line_bot_api.push_message('U64a243cd7b86df5261b788685e561a00', TextSendMessage(text='Hello World!'))
+print('new event = ' + num)
