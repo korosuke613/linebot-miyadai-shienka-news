@@ -63,7 +63,7 @@ def miyadaiOshirasePrint(i):
     send = " \n".join(sendList)
     return send
 
-def miyadaiOshiraseCheck(time_flag):
+def miyadaiOshiraseCheck():
     conn = connect_psql()
     cur = conn.cursor()
     

@@ -29,6 +29,8 @@ handler = WebhookHandler("ddfc9f05c96e0d56a473112c57b8c316") #Your Channel Secre
 
 print("croning")
 
-line_bot_api.push_message('U64a243cd7b86df5261b788685e561a00', TextSendMessage(text='Hello World!'))
+num = miyadai.miyadaiOshiraseCheck()
+if(num != 0):
+    print(miyadai.miyadaiOshirasePrunt(num))
 
-	
+line_bot_api.push_message('U64a243cd7b86df5261b788685e561a00', TextSendMessage(text='Hello World!'))
