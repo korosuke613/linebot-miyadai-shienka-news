@@ -63,7 +63,7 @@ def handle_text_message(event):
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
     b = cur.fetchone()
-    if b != 0:
+    if b[0] != 0:
         cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
     else:
         cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)", (event.source.user_id, profile.display_name, profile.status_message, '1',))  
