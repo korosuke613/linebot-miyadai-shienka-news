@@ -5,7 +5,7 @@
 10分に一度新しい情報がないかチェックしてあったらお知らせします。
 おまけでチャットボット機能もあります。
 
-ツイッター版もあります [【非公式】宮大支援課お知らせBOT @miya_330_bot](https://twitter.com/miya_330_bot, "https://twitter.com/miya_330_bot")
+ツイッター版もあります [【非公式】宮大支援課お知らせBOT @miya_330_bot](https://twitter.com/miya_330_bot "https://twitter.com/miya_330_bot")
 
 Pythonで書かれています。
 
