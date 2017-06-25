@@ -6,6 +6,7 @@ import urllib.request
 import re
 from flask import Flask, request, abort
 import tweet
+from doco.client import Client
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -30,6 +31,7 @@ HELP = "★宮大支援課お知らせBOT[非公式]" + "\n" + "このBOTは非�
 
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN')) #Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET')) #Your Channel Secret
+c = Client(apikey=os.environ.get('DOCOMO_API_KEY'))
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -51,18 +53,24 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     text = event.message.text #message from user
+    profile = line_bot_api.get_profile(event.source.user_id)
     if '宮大' in text:
         txt = miyadai.miyadaiOshirasePrint(5)
     elif "help" in text:
         txt = HELP
-    else:    
-        txt = response_ai(text)
+    else: 
+        user = {'nickname': profile.display_name}
+        res = c.send(utt=text, apiname='Dialogue', **user)
+        if(c.last_response.status_code == 200):
+            txt = res['utt']
+        else:
+            txt = response_ai(text)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt)) #reply the same message from user
-    profile = line_bot_api.get_profile(event.source.user_id)
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =" , text)
+    print("Reply =", txt)
     conn = miyadai.connect_psql()
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
