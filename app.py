@@ -56,6 +56,7 @@ def handle_text_message(event):
     profile = line_bot_api.get_profile(event.source.user_id)
     if '宮大' in text:
         txt = miyadai.miyadaiOshirasePrint(5)
+        isMiyadaiPrint = True
     elif "help" in text:
         txt = HELP
     else: 
@@ -79,6 +80,8 @@ def handle_text_message(event):
         cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
     else:
         cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)", (event.source.user_id, profile.display_name, profile.status_message, '1',))  
+    if isMiyadaiPrint == True:
+        txt = '宮大お知らせ'
     cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) VALUES (CURRENT_DATE, CURRENT_TIME, %s, %s, %s) ", (event.source.user_id, text, txt,))
     conn.commit()
     cur.close()
