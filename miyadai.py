@@ -73,6 +73,17 @@ def oshirase_print(i):
     return send
 
 
+def oshirase_print_once(i):
+    conn = connect_psql()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM miyadai WHERE id = (SELECT max(id) FROM miyadai) - %s", (i,))
+    b = cur.fetchone()
+    sendList2 = [b[1], b[2], b[3]]
+    send = "\n".join(sendList2)
+
+    return send
+
+
 def oshirase_check():
     conn = connect_psql()
     cur = conn.cursor()
@@ -125,8 +136,6 @@ if __name__ == "__main__":
     #    send = miyadaiOshirasePrint(1)
     #    print(send)
     #    miyadaiOshiraseInit()
-    num = oshirase_check()
-    if num != 0:
-        print(oshirase_print(num))
-    else:
-        print(oshirase_print(5))
+    num = 2
+    for _r in reversed(range(num)):
+        print(oshirase_print_once(_r))

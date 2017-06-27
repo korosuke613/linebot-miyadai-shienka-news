@@ -25,6 +25,7 @@ if num != 0:
         userList.append(row[0])
     txt = miyadai.oshirase_print(num)
     line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
-    tweet.tweet(txt)
+    for r in reversed(range(num)):
+        tweet.tweet(miyadai.oshirase_print_once(r))
 
 print("num =", num)
