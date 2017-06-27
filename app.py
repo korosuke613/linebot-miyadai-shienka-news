@@ -49,7 +49,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    global isMiyadaiPrint
+    isMiyadaiPrint = False
     text = event.message.text  # message from user
     profile = line_bot_api.get_profile(event.source.user_id)
     if '宮大' in text:
