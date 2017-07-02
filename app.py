@@ -27,6 +27,7 @@ HELP = "★宮大支援課お知らせBOT[非公式]\nこのBOTは非公式の�
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
 c = Client(apikey=os.environ.get('DOCOMO_API_KEY'))
+print_num = 0
 
 
 @app.route("/callback", methods=['POST'])
@@ -63,7 +64,6 @@ def response_ai(recv):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    print_num = 0
     isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
     text = event.message.text  # message from user
