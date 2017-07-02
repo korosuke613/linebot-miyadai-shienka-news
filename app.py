@@ -91,21 +91,19 @@ def handle_text_message(event):
             txt = res['utt']
         else:
             txt = response_ai(text)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=txt))  # reply the same message from user
     if isMiyadaiPrintOnce:
         conn = miyadai.connect_psql()
         cur = conn.cursor()
         news_url = miyadai.oshirase_print_once_only_url(print_num-1)
         cur.execute("select media_url from image_tbl where url = %s", (news_url,))
         b = cur.fetchone()
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=txt),
+        line_bot_api.push_message(
+            event.source.user_id,
             ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
         )
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=txt))  # reply the same message from user
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
     print("Reply =", txt)
@@ -113,7 +111,6 @@ def handle_text_message(event):
     cur = conn.cursor()
     cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
     b = cur.fetchone()
-    print("SELECT %s FROM users WHERE user_id = 1", txt)
     if b[0] != 0:
         cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
     else:
