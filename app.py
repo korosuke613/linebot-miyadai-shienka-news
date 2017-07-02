@@ -12,7 +12,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage,
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent
 )
 
@@ -49,6 +49,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+    isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
     text = event.message.text  # message from user
     profile = line_bot_api.get_profile(event.source.user_id)
@@ -58,7 +59,8 @@ def handle_text_message(event):
         if re.search(pattern, text):
             num = int(re.search(pattern, text).group(1))
             if 0 < num <= 5:
-                txt = miyadai.oshirase_print_once(num)
+                txt = miyadai.oshirase_print_once(num-1)
+                isMiyadaiPrintOnce = True
             else:
                 txt = miyadai.oshirase_print(5)
         else:
@@ -76,6 +78,12 @@ def handle_text_message(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt))  # reply the same message from user
+    if isMiyadaiPrintOnce:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=txt),  # reply the same message from user
+            ImageSendMessage(original_content_url="./screen.png")
+        )
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
     print("Reply =", txt)
