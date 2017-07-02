@@ -55,11 +55,14 @@ def handle_text_message(event):
     if '宮大' in text:
         # 正規表現
         pattern = r'([+-]?[0-9]+\.?[0-9]*)'
-        print('pattern:', pattern, 'text:', text)
-        print('match:', re.match(pattern, text))
-        print('search:', re.search(pattern, text))
-        print('findall:', re.findall(pattern, text))
-        txt = miyadai.oshirase_print(5)
+        if re.search(pattern, text):
+            num = int(re.search(pattern, text).group(1))
+            if 0 < num <= 5:
+                txt = miyadai.oshirase_print_once(num)
+            else:
+                txt = miyadai.oshirase_print(5)
+        else:
+            txt = miyadai.oshirase_print(5)
         isMiyadaiPrint = True
     elif "help" in text:
         txt = HELP

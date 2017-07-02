@@ -5,6 +5,7 @@ import urllib
 import os
 from selenium import webdriver
 from PIL import Image
+import re
 
 import tweet
 
@@ -219,4 +220,8 @@ if __name__ == "__main__":
     #   first_insert_to_img_table()
     #   screen_shot('http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3413-2017-6-1.html')
     #   open_image('http://gakumu.of.miyazaki-u.ac.jp/gakumu/jobinfo/jobinfonews/3457-kamikou.html')
-    tweet.tweet_with_media(oshirase_print_once(0), "send_img.png")
+    # tweet.tweet_with_media(oshirase_print_once(0), "send_img.png")
+    pattern = r'([+-]?[0-9]+\.?[0-9]*)'
+    text = "宮大"
+    if re.search(pattern, text):
+        num = re.search(pattern, text).group(1)
