@@ -100,10 +100,13 @@ def handle_text_message(event):
         news_url = miyadai.oshirase_print_once_only_url(print_num-1)
         cur.execute("select media_url from image_tbl where url = %s", (news_url,))
         b = cur.fetchone()
-        line_bot_api.push_message(
-            event.source.user_id,
-            ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
-        )
+        if b[0]:
+            line_bot_api.push_message(
+                event.source.user_id,
+                ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
+            )
+        cur.close()
+        conn.close()
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
     print("Reply =", txt)
