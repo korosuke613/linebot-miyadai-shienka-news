@@ -91,9 +91,6 @@ def handle_text_message(event):
             txt = res['utt']
         else:
             txt = response_ai(text)
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=txt))  # reply the same message from user
     if isMiyadaiPrintOnce:
         conn = miyadai.connect_psql()
         cur = conn.cursor()
@@ -102,9 +99,12 @@ def handle_text_message(event):
         b = cur.fetchone()
         line_bot_api.reply_message(
             event.reply_token,
-            # TextSendMessage(text=txt),  # reply the same message from user
             ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
         )
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=txt))  # reply the same message from user
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
     print("Reply =", txt)
