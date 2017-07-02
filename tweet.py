@@ -1,6 +1,7 @@
 # encoding: utf-8
 import json
 import os
+import miyadai
 
 from requests_oauthlib import OAuth1Session
 
@@ -51,12 +52,12 @@ def tweet_with_media(tweet_msg, file_name):
 
     # Media ID を取得
     media_id = json.loads(req_media.text)['media_id']
-    print("Media ID: %d" % media_id)
 
     # Media ID を付加してテキストを投稿
     params = {'status': tweet_msg, "media_ids": [media_id]}
     req_text = twitter.post(url_text, params=params)
-
+    media_url = json.loads(req_text.text)['entities']['media'][0]['media_url_https']
+    media_insert_to_database(miyadai.oshirase_print_once_only_url(0), media_url)
     # 再びレスポンスを確認
     if req_text.status_code != 200:
         print("テキストアップデート失敗: %s", req_text.text)
@@ -65,6 +66,18 @@ def tweet_with_media(tweet_msg, file_name):
         return 0
 
 
+def media_insert_to_database(news_url, media_url):
+    conn = miyadai.connect_psql()
+    cur = conn.cursor()
+    cur.execute("UPDATE image_tbl SET media_url = %s WHERE url = %s", (media_url, news_url))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 if __name__ == "__main__":
     # tweet("テスト用ツイート")
-    tweet_with_media("画像付きツイートテスト", "screen.png")
+    # tweet_with_media("画像付きツイートテスト7", "screen.png")
+    media_insert_to_database("http://gakumu.of.miyazaki-u.ac.jp/gakumu/jobinfo/jobinfonews/3457-kamikou.html",
+                             "https://pbs.twimg.com/media/DDvUf00VoAA8EZz.jpg")
+    print(miyadai.oshirase_print_once_only_url(0))

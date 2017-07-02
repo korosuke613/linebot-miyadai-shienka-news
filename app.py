@@ -47,8 +47,23 @@ def callback():
     return 'OK'
 
 
+def response_ai(recv):
+    recvEnc = urllib.parse.quote(recv)
+    urlStart = "https://chatbot-api.userlocal.jp/api/chat?message="
+    url = urlStart + recvEnc + os.environ.get('CHATBOT_KEY')
+    html = urllib.request.urlopen(url).read().decode("utf-8")
+    pattern = re.compile(r"\"([^\"]*)\"")
+    iterator = pattern.finditer(html)
+    i = 0
+    for match in iterator:
+        if i == 3:
+            return match.group(1)
+        i += 1
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
+    print_num = 0
     isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
     text = event.message.text  # message from user
@@ -57,9 +72,10 @@ def handle_text_message(event):
         # 正規表現
         pattern = r'([+-]?[0-9]+\.?[0-9]*)'
         if re.search(pattern, text):
-            num = int(re.search(pattern, text).group(1))
-            if 0 < num <= 5:
-                txt = miyadai.oshirase_print_once(num-1)
+            global print_num
+            print_num = int(re.search(pattern, text).group(1))
+            if 0 < print_num <= 5:
+                txt = miyadai.oshirase_print_once(print_num-1)
                 isMiyadaiPrintOnce = True
             else:
                 txt = miyadai.oshirase_print(5)
@@ -79,10 +95,14 @@ def handle_text_message(event):
         event.reply_token,
         TextSendMessage(text=txt))  # reply the same message from user
     if isMiyadaiPrintOnce:
+        conn = miyadai.connect_psql()
+        cur = conn.cursor()
+        news_url = miyadai.oshirase_print_once_only_url(print_num-1)
+        media_url = cur.execute("select media_url from image_tbl where url = %s", news_url)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=txt),  # reply the same message from user
-            ImageSendMessage(original_content_url="./screen.png")
+            ImageSendMessage(original_content_url=media_url)
         )
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
@@ -130,20 +150,6 @@ def handle_unfollow():
 @handler.add(LeaveEvent)
 def handle_leave():
     app.logger.info("Got leave event")
-
-
-def response_ai(recv):
-    recvEnc = urllib.parse.quote(recv)
-    urlStart = "https://chatbot-api.userlocal.jp/api/chat?message="
-    url = urlStart + recvEnc + os.environ.get('CHATBOT_KEY')
-    html = urllib.request.urlopen(url).read().decode("utf-8")
-    pattern = re.compile(r"\"([^\"]*)\"")
-    iterator = pattern.finditer(html)
-    i = 0
-    for match in iterator:
-        if i == 3:
-            return match.group(1)
-        i += 1
 
 
 if __name__ == "__main__":
