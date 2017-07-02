@@ -98,7 +98,7 @@ def handle_text_message(event):
         conn = miyadai.connect_psql()
         cur = conn.cursor()
         news_url = miyadai.oshirase_print_once_only_url(print_num-1)
-        media_url = cur.execute("select media_url from image_tbl where url = %s", news_url)
+        media_url = cur.execute("select media_url from image_tbl where url = %s", (news_url,))
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=txt),  # reply the same message from user
