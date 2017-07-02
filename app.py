@@ -21,8 +21,14 @@ from doco.client import Client
 
 app = Flask(__name__)
 
-HELP = "★宮大支援課お知らせBOT[非公式]\nこのBOTは非公式のものです。宮崎大学とは一切関係ありません。\n支援課からの新しいお知らせがあったときにこのBOTが教えてくれます\n・\'宮大\'を送信すると直近5" \
-       "件のお知らせを表示します\n・\'help\'を送信するとこのメッセージを表示します\n・Twitterアカウントはこちら↓\nhttps://twitter.com/miya_330_bot "
+HELP = "★宮大支援課お知らせBOT[非公式]\n \
+        このBOTは非公式のものです。宮崎大学とは一切関係ありません。\n \
+        支援課からの新しいお知らせがあったときにこのBOTが教えてくれます\n \
+        '宮大'を送信すると直近5件のお知らせを表示します\n \
+        '宮大'の後に数字を入力するとn個前のお知らせを表示します\n \
+        'help'を送信するとこのメッセージを表示します\n \
+        Twitterアカウントはこちら↓\n \
+        https://twitter.com/miya_330_bot"
 
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
