@@ -24,12 +24,11 @@ if num != 0:
     for row in rows:
         userList.append(row[0])
     txt = miyadai.oshirase_print(num)
-    # line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
+    line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
     for r in reversed(range(num)):
         url = miyadai.oshirase_print_once_only_url(r)
         miyadai.screen_shot(url)
         miyadai.open_image(url)
         tweet.tweet_with_media(miyadai.oshirase_print_once(r), "send_img.png")
-        tweet.tweet(miyadai.oshirase_print_once(r))
 
 print("num =", num)
