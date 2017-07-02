@@ -102,7 +102,7 @@ def handle_text_message(event):
         b = cur.fetchone()
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=txt),  # reply the same message from user
+            # TextSendMessage(text=txt),  # reply the same message from user
             ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
         )
     print(event.source.user_id, profile.display_name, profile.status_message)
