@@ -24,20 +24,18 @@ if num != 0:
     for row in rows:
         userList.append(row[0])
     txt = miyadai.oshirase_print(num)
-    # line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
     for r in reversed(range(num)):
         url = miyadai.oshirase_print_once_only_url(r)
         miyadai.screen_shot(url)
         miyadai.open_image(url)
         tweet.tweet_with_media(miyadai.oshirase_print_once(r), "send_img.png")
-    line_bot_api.push_message("U64a243cd7b86df5261b788685e561a00", TextSendMessage(text='【新着情報】\n' + txt))
+    line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
     if num == 1:
         news_url = miyadai.oshirase_print_once_only_url(0)
         media_url = miyadai.oshirase_print_once_only_media_url(news_url)
         if media_url:
-            line_bot_api.push_message(
-                "U64a243cd7b86df5261b788685e561a00",
-                ImageSendMessage(original_content_url=media_url, preview_image_url=media_url)
-            )
+            line_bot_api.multicast(
+                userList,
+                ImageSendMessage(original_content_url=media_url, preview_image_url=media_url))
 
 print("num =", num)
