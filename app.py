@@ -99,6 +99,7 @@ def handle_text_message(event):
         b = cur.fetchone()
         line_bot_api.reply_message(
             event.reply_token,
+            TextSendMessage(text=txt),
             ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
         )
     else:
