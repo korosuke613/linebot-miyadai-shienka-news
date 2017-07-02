@@ -95,18 +95,13 @@ def handle_text_message(event):
         event.reply_token,
         TextSendMessage(text=txt))  # reply the same message from user
     if isMiyadaiPrintOnce:
-        conn = miyadai.connect_psql()
-        cur = conn.cursor()
         news_url = miyadai.oshirase_print_once_only_url(print_num-1)
-        cur.execute("select media_url from image_tbl where url = %s", (news_url,))
-        b = cur.fetchone()
-        if b[0]:
+        media_url = miyadai.oshirase_print_once_only_media_url(news_url)
+        if media_url:
             line_bot_api.push_message(
                 event.source.user_id,
-                ImageSendMessage(original_content_url=b[0], preview_image_url=b[0])
+                ImageSendMessage(original_content_url=media_url, preview_image_url=media_url)
             )
-        cur.close()
-        conn.close()
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)
     print("Reply =", txt)

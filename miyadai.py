@@ -7,8 +7,6 @@ from selenium import webdriver
 from PIL import Image
 import re
 
-import tweet
-
 
 def connect_psql():
     urllib.parse.uses_netloc.append("postgres")
@@ -85,7 +83,8 @@ def oshirase_print_once(i):
     b = cur.fetchone()
     sendList2 = [b[1], b[2], b[3]]
     send = "\n".join(sendList2)
-
+    cur.close()
+    conn.close()
     return send
 
 
@@ -95,7 +94,19 @@ def oshirase_print_once_only_url(i):
     cur.execute("SELECT * FROM miyadai WHERE id = (SELECT max(id) FROM miyadai) - %s", (i,))
     b = cur.fetchone()
     send = b[3]
+    cur.close()
+    conn.close()
+    return send
 
+
+def oshirase_print_once_only_media_url(news_url):
+    conn = connect_psql()
+    cur = conn.cursor()
+    cur.execute("select media_url from image_tbl where url = %s", (news_url,))
+    b = cur.fetchone()
+    send = b[0]
+    cur.close()
+    conn.close()
     return send
 
 
