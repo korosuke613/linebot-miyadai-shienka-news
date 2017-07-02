@@ -162,6 +162,7 @@ def screen_shot(screen_url):
     driver = webdriver.PhantomJS()
     driver.set_window_size(1024, 768)
     driver.get(screen_url)
+    driver.save_screenshot('screen_origin.png')
     margin = 30
     left = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
     element.getBoundingClientRect(); return rect.left;""") - margin
@@ -171,8 +172,7 @@ def screen_shot(screen_url):
     element.getBoundingClientRect(); return rect.width;""") + left + margin
     bottom = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
         element.getBoundingClientRect(); return rect.height;""") + top + margin
-    driver.save_screenshot('screen_origin.png')
-    sleep(10)
+    sleep(20)
     driver.close()
 
     im = Image.open('screen_origin.png')
