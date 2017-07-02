@@ -1,4 +1,4 @@
-PIL
+Pillow
 line-bot-sdk
 flask
 beautifulsoup4==4.6.0
