@@ -6,7 +6,7 @@ import os
 from selenium import webdriver
 from PIL import Image
 import re
-
+from time import sleep
 
 def connect_psql():
     urllib.parse.uses_netloc.append("postgres")
@@ -172,6 +172,7 @@ def screen_shot(screen_url):
     bottom = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
         element.getBoundingClientRect(); return rect.height;""") + top + margin
     driver.save_screenshot('screen_origin.png')
+    sleep(10)
     driver.close()
 
     im = Image.open('screen_origin.png')
