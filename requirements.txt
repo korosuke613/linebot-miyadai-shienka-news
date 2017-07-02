@@ -1,3 +1,4 @@
+PIL
 line-bot-sdk
 flask
 beautifulsoup4==4.6.0
@@ -6,3 +7,4 @@ requests_oauthlib
 requests
 mock
 simplejson
+selenium
