@@ -3,10 +3,9 @@ from bs4 import BeautifulSoup
 import psycopg2
 import urllib
 import os
-from selenium import webdriver
-from PIL import Image
 import re
-from time import sleep
+from exphantom import ScreenShot
+
 
 def connect_psql():
     urllib.parse.uses_netloc.append("postgres")
@@ -159,26 +158,11 @@ def oshirase_check():
 
 
 def screen_shot(screen_url):
-    driver = webdriver.PhantomJS()
-    driver.set_window_size(1024, 768)
-    driver.get(screen_url)
-    driver.save_screenshot('screen_origin.png')
-    margin = 30
-    left = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
-    element.getBoundingClientRect(); return rect.left;""") - margin
-    top = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
-    element.getBoundingClientRect(); return rect.top;""")
-    right = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
-    element.getBoundingClientRect(); return rect.width;""") + left + margin
-    bottom = driver.execute_script("""var element = document.getElementById('wrapper2');var rect = 
-        element.getBoundingClientRect(); return rect.height;""") + top + margin
-    sleep(20)
-    driver.close()
+    ss = ScreenShot('screen.png')
+    ss.screen_shot_crop(url_=screen_url, search_element_name="wrapper2", search_element_type="Id")
+    del ss
 
-    im = Image.open('screen_origin.png')
-    im = im.crop((left, top, right, bottom))  # defines crop points
-    im.save('screen.png')  # saves new cropped image
-
+    '''
     conn = connect_psql()
     cur = conn.cursor()
     pic = open('screen.png', 'rb').read()
@@ -187,6 +171,7 @@ def screen_shot(screen_url):
     conn.commit()
     cur.close()
     conn.close()
+    '''
 
 
 def first_insert_to_img_table():
@@ -233,7 +218,8 @@ if __name__ == "__main__":
     #   screen_shot('http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3413-2017-6-1.html')
     #   open_image('http://gakumu.of.miyazaki-u.ac.jp/gakumu/jobinfo/jobinfonews/3457-kamikou.html')
     # tweet.tweet_with_media(oshirase_print_once(0), "send_img.png")
-    pattern = r'([+-]?[0-9]+\.?[0-9]*)'
-    text = "宮大"
-    if re.search(pattern, text):
-        num = re.search(pattern, text).group(1)
+    # pattern = r'([+-]?[0-9]+\.?[0-9]*)'
+    # text = "宮大"
+    # if re.search(pattern, text):
+    #    num = re.search(pattern, text).group(1)
+    screen_shot('http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3413-2017-6-1.html')
