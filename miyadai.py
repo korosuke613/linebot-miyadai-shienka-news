@@ -159,6 +159,7 @@ def oshirase_check():
 
 def screen_shot(screen_url):
     ss = ScreenShot('screen.png')
+    ss.set_crop_margin(30)
     ss.screen_shot_crop(url_=screen_url, search_element_name="wrapper2", search_element_type="Id")
     del ss
 
