@@ -24,7 +24,6 @@ class ScreenShot:
         except Exception as e:
             print(e)
             return False
-
         return True
 
     def screen_shot_crop(self, url_: str, search_element_name: str, search_element_type: str = "Id") -> bool:
@@ -35,7 +34,6 @@ class ScreenShot:
         :param search_element_name: search to element name
         :param search_element_type: search to element type
         """
-
         self.screen_shot(url_)
         before_script = """
                         var element = document.getElementBy""" + search_element_type + "('" + search_element_name + """');
@@ -49,7 +47,6 @@ class ScreenShot:
         except Exception as e:
             print(e)
             return False
-
         im = Image.open(self._filename)
         im = im.crop((left, top, right, bottom))
         im.save(self._filename)
@@ -67,6 +64,9 @@ class ScreenShot:
 
     def set_crop_margin(self, crop_margin_: int):
         self._crop_margin = crop_margin_
+
+    def ger_crop_margin(self) -> object:
+        return self._crop_margin
 
     def __del__(self):
         self._driver.close()

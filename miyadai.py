@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import psycopg2
 import urllib
 import os
-import re
 from exphantom import ScreenShot
 
 
@@ -163,7 +162,6 @@ def screen_shot(screen_url):
     ss.screen_shot_crop(url_=screen_url, search_element_name="wrapper2", search_element_type="Id")
     del ss
 
-    '''
     conn = connect_psql()
     cur = conn.cursor()
     pic = open('screen.png', 'rb').read()
@@ -172,7 +170,6 @@ def screen_shot(screen_url):
     conn.commit()
     cur.close()
     conn.close()
-    '''
 
 
 def first_insert_to_img_table():
