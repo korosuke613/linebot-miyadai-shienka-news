@@ -33,7 +33,6 @@ HELP = "★宮大支援課お知らせBOT[非公式]\n \
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
 c = Client(apikey=os.environ.get('DOCOMO_API_KEY'))
-print_num = 0
 
 
 @app.route("/callback", methods=['POST'])
@@ -72,13 +71,13 @@ def response_ai(recv):
 def handle_text_message(event):
     isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
+    print_num = 0
     text = event.message.text  # message from user
     profile = line_bot_api.get_profile(event.source.user_id)
     if '宮大' in text:
         # 正規表現
         pattern = r'([+-]?[0-9]+\.?[0-9]*)'
         if re.search(pattern, text):
-            global print_num
             print_num = int(re.search(pattern, text).group(1))
             if 0 < print_num <= 5:
                 txt = miyadai.oshirase_print_once(print_num-1)
