@@ -101,6 +101,10 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=txt))  # reply the same message from user
+    elif isMiyadaiPrintOnce:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=txt))  # reply the same message from user
     else:
         send_carousel = carousel.get_carousel()
         line_bot_api.reply_message(

@@ -53,7 +53,6 @@ def get_carouselList(offset: int=0):
             _image_urlList.append(b[0])
     cur.close()
     conn.close()
-    print(_image_urlList)
     _sendList = [_titleList, _textList, _uriList, _image_urlList]
     return _sendList
 
@@ -64,7 +63,6 @@ def get_carousel(offset: int=0):
     textList = newsList[1]
     uriList = newsList[2]
     imageUrlList = newsList[3]
-    print(imageUrlList)
     carouselList = [
         CarouselColumn(
                 thumbnail_image_url=imageUrlList[r],
