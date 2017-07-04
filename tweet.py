@@ -57,13 +57,12 @@ def tweet_with_media(tweet_msg, file_name):
     params = {'status': tweet_msg, "media_ids": [media_id]}
     req_text = twitter.post(url_text, params=params)
     media_url = json.loads(req_text.text)['entities']['media'][0]['media_url_https']
-    media_insert_to_database(miyadai.oshirase_print_once_only_url(0), media_url)
     # 再びレスポンスを確認
     if req_text.status_code != 200:
         print("テキストアップデート失敗: %s", req_text.text)
-        return 1
+        return -1
     else:
-        return 0
+        return media_url
 
 
 def media_insert_to_database(news_url, media_url):
