@@ -37,7 +37,13 @@ def get_carousel_list(offset: int=0):
     for r in range(4):
         b = cur.fetchone()
         _uriList.append(b[3])
-        _titleList.append(b[2])
+        len_title = len(b[2])
+        if len_title > 40:
+            _title = b[2][:37-len_title]
+            _title = _title + "・・・"
+        else:
+            _title = b[2]
+        _titleList.append(_title)
         _textList.append(b[1])
 
     _image_urlList = []
@@ -47,7 +53,9 @@ def get_carousel_list(offset: int=0):
 
     for r in range(4):
         b = cur.fetchone()
-        if not b[0]:
+        if not b:
+            _image_urlList.append("https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg")
+        elif not b[0]:
             _image_urlList.append("https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg")
         else:
             _image_urlList.append(b[0])
@@ -110,6 +118,7 @@ def get_carousel(offset: int=0):
 
 
 if __name__ == "__main__":
-    send_carousel = get_carousel(4)
-    print(get_carousel_list(4))
+    i = 3
+    send_carousel = get_carousel(i)
+    print(get_carousel_list(i))
     line_bot_api.push_message(os.environ.get('FUTA_ID'), send_carousel)
