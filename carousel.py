@@ -89,7 +89,7 @@ def get_carousel(offset: int=0):
             )
         for r in range(4)]
 
-    column_text = str(offset+1) + "〜" + str(offset+4) + "ページです"
+    column_text = str(offset+1) + "〜" + str(offset+4) + "ページです\n＊2017年6月30日以前の画像はありません。すみません。"
     carouselList.append(
         CarouselColumn(
             thumbnail_image_url="https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg",
@@ -118,7 +118,7 @@ def get_carousel(offset: int=0):
 
 
 if __name__ == "__main__":
-    i = 3
+    i = 16
     send_carousel = get_carousel(i)
     print(get_carousel_list(i))
     line_bot_api.push_message(os.environ.get('FUTA_ID'), send_carousel)
