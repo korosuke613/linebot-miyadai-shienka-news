@@ -17,6 +17,7 @@ from linebot.models import (
 )
 
 import miyadai
+import carousel
 from doco.client import Client
 
 app = Flask(__name__)
@@ -96,9 +97,15 @@ def handle_text_message(event):
             txt = res['utt']
         else:
             txt = response_ai(text)
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=txt))  # reply the same message from user
+    if not isMiyadaiPrint:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=txt))  # reply the same message from user
+    else:
+        send_carousel = carousel.get_carousel()
+        line_bot_api.reply_message(
+            event.reply_token,
+            send_carousel)
     if isMiyadaiPrintOnce:
         news_url = miyadai.oshirase_print_once_only_url(print_num-1)
         media_url = miyadai.oshirase_print_once_only_media_url(news_url)

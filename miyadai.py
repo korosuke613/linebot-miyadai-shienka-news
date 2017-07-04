@@ -97,6 +97,17 @@ def oshirase_print_once_only_url(i):
     return send
 
 
+def oshirase_print_once_only_title(i):
+    conn = connect_psql()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM miyadai WHERE id = (SELECT max(id) FROM miyadai) - %s", (i,))
+    b = cur.fetchone()
+    send = b[2]
+    cur.close()
+    conn.close()
+    return send
+
+
 def oshirase_print_once_only_media_url(news_url):
     conn = connect_psql()
     cur = conn.cursor()
