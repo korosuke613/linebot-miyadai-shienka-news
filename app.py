@@ -75,18 +75,35 @@ def handle_text_message(event):
     print_num = 0
     text = event.message.text  # message from user
     profile = line_bot_api.get_profile(event.source.user_id)
-    if '宮大' in text:
+    if '過去宮大' in text:
         # 正規表現
         pattern = r'([+-]?[0-9]+\.?[0-9]*)'
         if re.search(pattern, text):
             print_num = int(re.search(pattern, text).group(1))
-            if 0 < print_num <= 5:
+            if 0 < print_num <= 100:
+                txt = miyadai.oshirase_print(5)
+                send_carousel = carousel.get_carousel(print_num)
+            else:
+                txt = miyadai.oshirase_print(5)
+                send_carousel = carousel.get_carousel()
+        else:
+            txt = miyadai.oshirase_print(5)
+            send_carousel = carousel.get_carousel()
+        isMiyadaiPrint = True
+    elif '宮大' in text:
+        # 正規表現
+        pattern = r'([+-]?[0-9]+\.?[0-9]*)'
+        if re.search(pattern, text):
+            print_num = int(re.search(pattern, text).group(1))
+            if 0 < print_num <= 100:
                 txt = miyadai.oshirase_print_once(print_num-1)
                 isMiyadaiPrintOnce = True
             else:
                 txt = miyadai.oshirase_print(5)
+                send_carousel = carousel.get_carousel()
         else:
             txt = miyadai.oshirase_print(5)
+            send_carousel = carousel.get_carousel()
         isMiyadaiPrint = True
     elif "help" in text:
         txt = HELP
@@ -106,7 +123,6 @@ def handle_text_message(event):
             event.reply_token,
             TextSendMessage(text=txt))  # reply the same message from user
     else:
-        send_carousel = carousel.get_carousel()
         line_bot_api.reply_message(
             event.reply_token,
             send_carousel)

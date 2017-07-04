@@ -34,7 +34,7 @@ def get_carouselList(offset: int=0):
     _uriList = []
     _titleList = []
     _textList = []
-    for r in range(5):
+    for r in range(4):
         b = cur.fetchone()
         _uriList.append(b[3])
         _titleList.append(b[2])
@@ -45,7 +45,7 @@ def get_carouselList(offset: int=0):
         "select media_url from image_tbl, miyadai WHERE miyadai.url = image_tbl.url "
         "AND id <= (SELECT max(id) FROM miyadai) - %s ORDER BY id DESC", (offset,))
 
-    for r in range(5):
+    for r in range(4):
         b = cur.fetchone()
         if not b[0]:
             _image_urlList.append("https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg")
@@ -71,7 +71,7 @@ def get_carousel(offset: int=0):
                 actions=[
                     MessageTemplateAction(
                         label='画像を見る',
-                        text='宮大' + str(r+1)
+                        text='宮大' + str(offset + r+1)
                     ),
                     URITemplateAction(
                         label='URLを開く',
@@ -79,7 +79,26 @@ def get_carousel(offset: int=0):
                     )
                 ]
             )
-        for r in range(5)]
+        for r in range(4)]
+
+    column_text = str(offset+1) + "〜" + str(offset+5) + "ページです"
+    carouselList.append(
+        CarouselColumn(
+            thumbnail_image_url="https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg",
+            title="宮大支援課お知らせBot",
+            text=column_text,
+            actions=[
+                MessageTemplateAction(
+                    label='もっと前のお知らせを見る',
+                    text='過去宮大' + str(offset+4)
+                ),
+                URITemplateAction(
+                    label='支援課のサイトはこちら♪',
+                    uri='http://gakumu.of.miyazaki-u.ac.jp/gakumu/'
+                )
+            ]
+        )
+    )
 
     _send_carousel = TemplateSendMessage(
         alt_text='宮大お知らせ',

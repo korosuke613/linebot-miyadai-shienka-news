@@ -45,7 +45,25 @@ def send_carousel_test():
                     )
                 ]
             )
-        for r in range(5)]
+        for r in range(4)]
+
+    carouselList.append(
+        CarouselColumn(
+            thumbnail_image_url=imageUrlList[0],
+            title=titleList[0],
+            text=textList[0],
+            actions=[
+                MessageTemplateAction(
+                    label='それより前へ',
+                    text='過去宮大' + str(5)
+                ),
+                MessageTemplateAction(
+                    label='それより前へ',
+                    text='過去宮大' + str(5)
+                )
+            ]
+        )
+    )
 
     carousel_template_message = TemplateSendMessage(
         alt_text='Carousel template',
