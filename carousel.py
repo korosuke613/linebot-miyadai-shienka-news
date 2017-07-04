@@ -97,7 +97,7 @@ def get_carousel(offset: int=0):
             text=column_text,
             actions=[
                 MessageTemplateAction(
-                    label='もっと前のお知らせを見る',
+                    label='次のページ',
                     text='過去宮大' + str(offset+4)
                 ),
                 URITemplateAction(
