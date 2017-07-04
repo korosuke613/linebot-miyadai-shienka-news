@@ -25,7 +25,7 @@ def get_title_list(offset: int=0):
     return _titleList
 
 
-def get_carouselList(offset: int=0):
+def get_carousel_list(offset: int=0):
     conn = miyadai.connect_psql()
     cur = conn.cursor()
 
@@ -58,7 +58,7 @@ def get_carouselList(offset: int=0):
 
 
 def get_carousel(offset: int=0):
-    newsList = get_carouselList(offset)
+    newsList = get_carousel_list(offset)
     titleList = newsList[0]
     textList = newsList[1]
     uriList = newsList[2]
@@ -81,7 +81,7 @@ def get_carousel(offset: int=0):
             )
         for r in range(4)]
 
-    column_text = str(offset+1) + "〜" + str(offset+5) + "ページです"
+    column_text = str(offset+1) + "〜" + str(offset+4) + "ページです"
     carouselList.append(
         CarouselColumn(
             thumbnail_image_url="https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg",
@@ -110,5 +110,6 @@ def get_carousel(offset: int=0):
 
 
 if __name__ == "__main__":
-    send_carousel = get_carousel()
+    send_carousel = get_carousel(4)
+    print(get_carousel_list(4))
     line_bot_api.push_message(os.environ.get('FUTA_ID'), send_carousel)
