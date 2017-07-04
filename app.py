@@ -23,12 +23,12 @@ from doco.client import Client
 app = Flask(__name__)
 
 HELP = """★宮大支援課お知らせBOT[非公式]
-        このBOTは非公式のものです。宮崎大学とは一切関係ありません。
-        支援課からの新しいお知らせがあったときにこのBOTが教えてくれます。
-        '宮大'を送信すると直近5件のお知らせを表示します
-        'help'を送信するとこのメッセージを表示します
-        Twitterアカウントはこちら↓
-        https://twitter.com/miya_330_bot"""
+このBOTは非公式のものです。宮崎大学とは一切関係ありません。
+支援課からの新しいお知らせがあったときにこのBOTが教えてくれます。
+'宮大'を送信すると直近5件のお知らせを表示します
+'help'を送信するとこのメッセージを表示します
+Twitterアカウントはこちら↓
+https://twitter.com/miya_330_bot"""
 
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
@@ -72,6 +72,7 @@ def handle_text_message(event):
     isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
     print_num = 0
+    send_carousel = 0
     text = event.message.text  # message from user
     profile = line_bot_api.get_profile(event.source.user_id)
     if '過去宮大' in text:
