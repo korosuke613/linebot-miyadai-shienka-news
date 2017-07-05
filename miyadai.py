@@ -113,7 +113,12 @@ def oshirase_print_once_only_media_url(news_url):
     cur = conn.cursor()
     cur.execute("select media_url from image_tbl where url = %s", (news_url,))
     b = cur.fetchone()
-    send = b[0]
+    if not b:
+        send = 0
+    elif not b[0]:
+        send = 0
+    else:
+        send = b[0]
     cur.close()
     conn.close()
     return send
