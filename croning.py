@@ -18,6 +18,7 @@ handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secre
 
 print("croling...")
 # 何個新着情報があるか取得
+num = 0
 try:
     num = miyadai.oshirase_check()
 except Exception as e:
