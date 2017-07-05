@@ -18,7 +18,12 @@ handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secre
 
 print("croling...")
 # 何個新着情報があるか取得
-num = miyadai.oshirase_check()
+try:
+    num = miyadai.oshirase_check()
+except Exception as e:
+    line_bot_api.push_message(os.environ.get('FUTA_ID'), e)
+    print(e)
+
 print("num =", num)
 if num != 0:
     # 登録ユーザを確認
