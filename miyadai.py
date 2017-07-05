@@ -155,7 +155,7 @@ def oshirase_check():
             break
     if i != 0:
         for r in reversed(range(i)):
-            cur.execute("select count(*) from miyadai where url = %s", (urls[r]))
+            cur.execute("select count(*) from miyadai where url = %s", (urls[r],))
             b = cur.fetchone()
             if b[0] == 0:
                 cur.execute("INSERT INTO miyadai (days, title, url) VALUES (%s, %s, %s)",
