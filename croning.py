@@ -61,10 +61,10 @@ if num != 0:
             if not media_url == -1:
                 line_bot_api.multicast(
                     userList,
-                    ImageSendMessage(original_content_url=media_url, preview_image_url=media_url[0]))
+                    ImageSendMessage(original_content_url=media_url[0], preview_image_url=media_url[0]))
                 line_bot_api.multicast(
                     userList,
-                    ImageSendMessage(original_content_url=media_url, preview_image_url=media_url[1]))
+                    ImageSendMessage(original_content_url=media_url[1], preview_image_url=media_url[1]))
         else:
             # 画像付きツイート
             media_url = tweet.tweet_with_media(myzk.oshirase_print_once(r), "send_img.png")
