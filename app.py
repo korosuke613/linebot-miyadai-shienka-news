@@ -137,20 +137,17 @@ def handle_text_message(event):
     if isMiyadaiPrint:
         txt = '宮大お知らせ'
     print("Reply =", txt)
-    conn = miyadai.connect_psql()
-    cur = conn.cursor()
-    cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
-    b = cur.fetchone()
+    myzk.cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
+    b = myzk.cur.fetchone()
     if b[0] != 0:
-        cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
+        myzk.cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
     else:
-        cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)",
+        myzk.cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)",
                     (event.source.user_id, profile.display_name, profile.status_message, '1',))
-    cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) VALUES (CURRENT_DATE, CURRENT_TIME, "
+    myzk.cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) VALUES (CURRENT_DATE, CURRENT_TIME, "
                 "%s, %s, %s) ", (event.source.user_id, text, txt,))
-    conn.commit()
-    cur.close()
-    conn.close()
+    myzk.conn.commit()
+
 
 
 @handler.add(FollowEvent)
