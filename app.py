@@ -73,6 +73,7 @@ def response_ai(recv):
 def handle_text_message(event):
     isMiyadaiPrintOnce = False
     isMiyadaiPrint = False
+    txt = "error"
     print_num = 0
     send_carousel = 0
     text = event.message.text  # message from user
@@ -83,16 +84,10 @@ def handle_text_message(event):
         if re.search(pattern, text):
             print_num = int(re.search(pattern, text).group(1))
             if 0 < print_num <= 100:
-                txt = myzk.oshirase_prints(5)
-                print(txt)
-                txt = miyadai.oshirase_print(5)
-                print(txt)
                 send_carousel = carousel.get_carousel(print_num)
             else:
-                txt = miyadai.oshirase_print(5)
                 send_carousel = carousel.get_carousel()
         else:
-            txt = miyadai.oshirase_print(5)
             send_carousel = carousel.get_carousel()
         isMiyadaiPrint = True
     elif '宮大' in text:
@@ -101,6 +96,8 @@ def handle_text_message(event):
         if re.search(pattern, text):
             print_num = int(re.search(pattern, text).group(1))
             if 0 < print_num <= 100:
+                txt = myzk.oshirase_print_once(print_num-1)
+                print(txt)
                 txt = miyadai.oshirase_print_once(print_num-1)
                 isMiyadaiPrintOnce = True
             else:
