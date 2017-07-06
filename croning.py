@@ -39,6 +39,9 @@ if num != 0:
     for r in reversed(range(num)):
         # お知らせURLを取得
         news_url = myzk.oshirase_print_once_only_url(r)
+        already_check = myzk.oshirase_print_once_only_media_url(news_url=news_url)
+        if not already_check == 0:
+            continue
         # スクショ撮影
         myzk.screen_shot(news_url)
         # スクショをローカルに保持

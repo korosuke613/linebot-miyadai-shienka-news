@@ -162,19 +162,22 @@ class MiyadaiDatabaseControl(DatabaseControl):
 
         return True
 
+    def check_pdf(self, screen_url):
+        html = urllib.request.urlopen(screen_url)
+        soup = BeautifulSoup(html, "html.parser")
+        tag_main = soup.find('div', id='wrapper2')
+        tag_a = tag_main.findAll('a')
+        for a in tag_a:
+            if a.string is not None:
+                pdf_url = a.get('href')
+                if '.pdf' in pdf_url:
+                    pdf_url = 'http://gakumu.of.miyazaki-u.ac.jp' + pdf_url
+                    return pdf_url
+        return 0
 
 if __name__ == "__main__":
     myzk = MiyadaiDatabaseControl()
-    # print(myzk.get_users())
-    # print(myzk.oshirase_prints(3))
-    # print(myzk.oshirase_print_once(0))
-    print(myzk.oshirase_print_once_only_title())
-    url = myzk.oshirase_print_once_only_url()
-    print(url)
     print(myzk.oshirase_print_once_only_media_url(
-        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/andsoon/andsoon/3428-20170613.html"))
-    print(myzk.oshirase_print_once_only_media_url(
-        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/andsoon/andsoon/700-setuden.html"))
-    print(myzk.open_image(url))
-    #    print(myzk.oshirase_check())
+        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3461-2017-07-05-03-56-51.html"))
+    print(myzk.oshirase_print_once_only_media_url("http://gakumu.of.miyazaki-u.ac.jp/gakumu/allnews"))
     myzk.close_connect()
