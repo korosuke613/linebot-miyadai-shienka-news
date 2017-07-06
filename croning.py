@@ -11,6 +11,7 @@ from linebot.models import (
 
 import tweet
 import miyadaidb
+from modules import pdf2png
 
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 
@@ -42,20 +43,37 @@ if num != 0:
         already_check = myzk.oshirase_print_once_only_media_url(news_url=news_url)
         if not already_check == 0:
             continue
+        # お知らせテキストの取得
+        txt = myzk.oshirase_print_once(r)
         # スクショ撮影
         myzk.screen_shot(news_url)
         # スクショをローカルに保持
         myzk.open_image(news_url)
-        # お知らせテキストの取得
-        txt = myzk.oshirase_print_once(r)
-        # 画像付きツイート
-        media_url = tweet.tweet_with_media(myzk.oshirase_print_once(r), "send_img.png")
-        tweet.media_insert_to_database(news_url, media_url)
-        # お知らせテキストのline配信
-        line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
-        # ツイートした画像のURL取得
-        if not media_url == -1:
-            line_bot_api.multicast(
-                userList,
-                ImageSendMessage(original_content_url=media_url, preview_image_url=media_url))
+        pdf_url = myzk.check_pdf(news_url)
+        if not pdf_url == 0:
+            pdf2png.download_pdf(pdf_url, "myzk.pdf")
+            pdf2png.convert("./myzk.pdf")
+            media_url = tweet.tweet_with_media_two(myzk.oshirase_print_once(r), "send_img.png", "myzk.png")
+            tweet.media_insert_to_database_two(news_url, media_url=media_url[0], pdf_media_url=media_url[1])
+            # お知らせテキストのline配信
+            line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
+            # ツイートした画像のURL取得
+            if not media_url == -1:
+                line_bot_api.multicast(
+                    userList,
+                    ImageSendMessage(original_content_url=media_url, preview_image_url=media_url[0]))
+                line_bot_api.multicast(
+                    userList,
+                    ImageSendMessage(original_content_url=media_url, preview_image_url=media_url[1]))
+        else:
+            # 画像付きツイート
+            media_url = tweet.tweet_with_media(myzk.oshirase_print_once(r), "send_img.png")
+            tweet.media_insert_to_database(news_url, media_url)
+            # お知らせテキストのline配信
+            line_bot_api.multicast(userList, TextSendMessage(text='【新着情報】\n' + txt))
+            # ツイートした画像のURL取得
+            if not media_url == -1:
+                line_bot_api.multicast(
+                    userList,
+                    ImageSendMessage(original_content_url=media_url, preview_image_url=media_url))
 myzk.conn.close()

@@ -124,8 +124,20 @@ def media_insert_to_database(news_url, media_url):
     myzk.conn.commit()
 
 
+def media_insert_to_database_two(news_url, media_url, pdf_media_url):
+    myzk.cur.execute("UPDATE image_tbl SET media_url = %s, pdf_media_url = %s WHERE url = %s",
+                     (media_url, pdf_media_url, news_url))
+    myzk.conn.commit()
+
+
+def return_test():
+    return "a", "b"
+
 if __name__ == "__main__":
     # tweet("テスト用ツイート")
     # tweet_with_media("画像付きツイートテスト7", "screen.png")
     # print(tweet_with_media_two("画像付きツイートテスト", "screenshot_crop.png", "myzk.png"))
+    ab = return_test()
+    print(ab[0])
+    print(ab[1])
     pass
