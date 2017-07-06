@@ -2,12 +2,11 @@ import os
 import urllib.request
 
 import psycopg2
-import requests
 from bs4 import BeautifulSoup
 
+from modules import pdf2png
 from modules.controldb import DatabaseControl
 from modules.exphantom import ScreenShot
-from modules.pdf2png import convert
 
 
 class MiyadaiDatabaseControl(DatabaseControl):
@@ -164,7 +163,8 @@ class MiyadaiDatabaseControl(DatabaseControl):
 
         return True
 
-    def check_pdf(self, screen_url):
+    @staticmethod
+    def check_pdf(screen_url):
         html = urllib.request.urlopen(screen_url)
         soup = BeautifulSoup(html, "html.parser")
         tag_main = soup.find('div', id='wrapper2')
@@ -177,18 +177,11 @@ class MiyadaiDatabaseControl(DatabaseControl):
                     return pdf_url
         return 0
 
-    def download_pdf(self, pdf_url, file_name):
-        r = requests.get(pdf_url)
-        # ファイルの保存
-        if r.status_code == 200:
-            f = open(file_name, 'wb')
-            f.write(r.content)
-            f.close()
 
 if __name__ == "__main__":
     myzk = MiyadaiDatabaseControl()
     url = myzk.check_pdf(
         "http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3470-2017-07-06-07-36-07.html")
-    myzk.download_pdf(url, "myzk.pdf")
-    convert("./myzk.pdf")
+    pdf2png.download_pdf(url, "myzk.pdf")
+    pdf2png.convert("./myzk.pdf")
     myzk.close_connect()
