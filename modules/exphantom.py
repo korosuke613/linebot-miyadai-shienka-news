@@ -74,11 +74,11 @@ class ScreenShot:
 
 if __name__ == "__main__":
     # スクリーンショットを撮るURLを指定
-    screen_url = "https://www.yahoo.co.jp"
+    screen_url = "http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/3470-2017-07-06-07-36-07.html"
     # クロップする要素の属性を指定
     element_type = "Id"
     # クロップする要素名を指定
-    element_name = "topicsboxbd"
+    element_name = "wrapper2"
     # インスタンスを生成するときに保存先ファイル名を指定
     ss = ScreenShot("screenshot.png")
     # screen_urlのスクリーンショットを保存
