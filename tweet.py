@@ -1,9 +1,11 @@
 # encoding: utf-8
 import json
 import os
-import miyadai
+import miyadaidb
 
 from requests_oauthlib import OAuth1Session
+
+myzk = miyadaidb.MiyadaiDatabaseControl()
 
 
 def tweet(txt):
@@ -66,17 +68,11 @@ def tweet_with_media(tweet_msg, file_name):
 
 
 def media_insert_to_database(news_url, media_url):
-    conn = miyadai.connect_psql()
-    cur = conn.cursor()
-    cur.execute("UPDATE image_tbl SET media_url = %s WHERE url = %s", (media_url, news_url))
-    conn.commit()
-    cur.close()
-    conn.close()
+    myzk.cur.execute("UPDATE image_tbl SET media_url = %s WHERE url = %s", (media_url, news_url))
+    myzk.conn.commit()
 
 
 if __name__ == "__main__":
     # tweet("テスト用ツイート")
     # tweet_with_media("画像付きツイートテスト7", "screen.png")
-    media_insert_to_database("http://gakumu.of.miyazaki-u.ac.jp/gakumu/jobinfo/jobinfonews/3457-kamikou.html",
-                             "https://pbs.twimg.com/media/DDvUf00VoAA8EZz.jpg")
-    print(miyadai.oshirase_print_once_only_url(0))
+    pass
