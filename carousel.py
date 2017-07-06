@@ -9,33 +9,32 @@ from linebot.models import (
     CarouselTemplate, CarouselColumn, MessageTemplateAction, URITemplateAction,
     TemplateSendMessage)
 
-import miyadai
+import miyadaidb
 
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
+myzk = miyadaidb.MiyadaiDatabaseControl()
 
 
 def get_uri_list(offset: int=0):
-    _uriList = [miyadai.oshirase_print_once_only_url(offset + r) for r in range(5)]
+    _uriList = [myzk.oshirase_print_once_only_url(offset + r) for r in range(5)]
     return _uriList
 
 
 def get_title_list(offset: int=0):
-    _titleList = [miyadai.oshirase_print_once_only_title(offset + r) for r in range(5)]
+    _titleList = [myzk.oshirase_print_once_only_title(offset + r) for r in range(5)]
     return _titleList
 
 
 def get_carousel_list(offset: int=0):
-    conn = miyadai.connect_psql()
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM miyadai WHERE id <= (SELECT max(id) FROM miyadai) - %s ORDER BY id DESC ", (offset,))
+    myzk.cur.execute("SELECT * FROM miyadai WHERE id <= (SELECT max(id) FROM miyadai)"
+                     " - %s ORDER BY id DESC ", (offset,))
 
     _uriList = []
     _titleList = []
     _textList = []
     for r in range(4):
-        b = cur.fetchone()
+        b = myzk.cur.fetchone()
         _uriList.append(b[3])
         len_title = len(b[2])
         if len_title > 40:
@@ -47,20 +46,18 @@ def get_carousel_list(offset: int=0):
         _textList.append(b[1])
 
     _image_urlList = []
-    cur.execute(
+    myzk.cur.execute(
         "select media_url from image_tbl, miyadai WHERE miyadai.url = image_tbl.url "
         "AND id <= (SELECT max(id) FROM miyadai) - %s ORDER BY id DESC", (offset,))
 
     for r in range(4):
-        b = cur.fetchone()
+        b = myzk.cur.fetchone()
         if not b:
             _image_urlList.append("https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg")
         elif not b[0]:
             _image_urlList.append("https://www.kuaskmenkyo.necps.jp/miyazaki/UnivImages/宮崎大学画像.jpg")
         else:
             _image_urlList.append(b[0])
-    cur.close()
-    conn.close()
     _sendList = [_titleList, _textList, _uriList, _image_urlList]
     return _sendList
 
