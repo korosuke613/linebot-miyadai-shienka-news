@@ -65,8 +65,11 @@ class MiyadaiDatabaseControl(DatabaseControl):
     def oshirase_print_once(self, i=0):
         self.cur.execute("SELECT * FROM miyadai WHERE id = (SELECT max(id) FROM miyadai) - %s", (i,))
         b = self.cur.fetchone()
-        sendList2 = [b[1], b[2], b[3]]
-        send = "\n".join(sendList2)
+        if not b:
+            send = 0
+        else:
+            sendList2 = [b[1], b[2], b[3]]
+            send = "\n".join(sendList2)
         return send
 
     def oshirase_print_once_only_url(self, i=0):
