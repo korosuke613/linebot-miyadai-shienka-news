@@ -16,7 +16,6 @@ from linebot.models import (
     UnfollowEvent, FollowEvent, JoinEvent, LeaveEvent
 )
 
-import miyadai
 import miyadaidb
 import carousel
 from doco.client import Client
@@ -143,11 +142,10 @@ def handle_text_message(event):
         myzk.cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
     else:
         myzk.cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)",
-                    (event.source.user_id, profile.display_name, profile.status_message, '1',))
-    myzk.cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) VALUES (CURRENT_DATE, CURRENT_TIME, "
-                "%s, %s, %s) ", (event.source.user_id, text, txt,))
+                         (event.source.user_id, profile.display_name, profile.status_message, '1',))
+    myzk.cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) "
+                     "VALUES (CURRENT_DATE, CURRENT_TIME, %s, %s, %s) ", (event.source.user_id, text, txt,))
     myzk.conn.commit()
-
 
 
 @handler.add(FollowEvent)
@@ -156,6 +154,20 @@ def handle_follow(event):
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=txt))  # reply the same message from user
+
+    profile = line_bot_api.get_profile(event.source.user_id)
+    text = "新規登録"
+
+    myzk.cur.execute("SELECT count(*) FROM users WHERE user_id = %s ", (event.source.user_id,))
+    b = myzk.cur.fetchone()
+    if b[0] != 0:
+        myzk.cur.execute("UPDATE users SET send_num = send_num + 1 WHERE user_id = %s", (event.source.user_id,))
+    else:
+        myzk.cur.execute("INSERT INTO users (user_id, display_name, status_message, send_num) VALUES (%s, %s, %s, %s)",
+                         (event.source.user_id, profile.display_name, profile.status_message, '1',))
+    myzk.cur.execute("INSERT INTO msg_logs (days, times, user_id, user_send, bot_send) "
+                     "VALUES (CURRENT_DATE, CURRENT_TIME, %s, %s, %s) ", (event.source.user_id, text, txt,))
+    myzk.conn.commit()
 
 
 @handler.add(JoinEvent)
