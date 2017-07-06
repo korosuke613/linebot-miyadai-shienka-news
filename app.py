@@ -17,6 +17,7 @@ from linebot.models import (
 )
 
 import miyadai
+import miyadaidb
 import carousel
 from doco.client import Client
 
@@ -30,6 +31,7 @@ HELP = """★宮大支援課お知らせBOT[非公式]
 Twitterアカウントはこちら↓
 https://twitter.com/miya_330_bot"""
 
+myzk = miyadaidb.MiyadaiDatabaseControl()
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))  # Your Channel Access Token
 handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))  # Your Channel Secret
 c = Client(apikey=os.environ.get('DOCOMO_API_KEY'))
@@ -81,7 +83,10 @@ def handle_text_message(event):
         if re.search(pattern, text):
             print_num = int(re.search(pattern, text).group(1))
             if 0 < print_num <= 100:
+                txt = myzk.oshirase_prints(5)
+                print(txt)
                 txt = miyadai.oshirase_print(5)
+                print(txt)
                 send_carousel = carousel.get_carousel(print_num)
             else:
                 txt = miyadai.oshirase_print(5)

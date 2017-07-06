@@ -4,25 +4,8 @@ import urllib.request
 import psycopg2
 from bs4 import BeautifulSoup
 
-from exphantom import ScreenShot
-
-
-class DatabaseControl:
-    def __init__(self, db_url_):
-        urllib.parse.uses_netloc.append("postgres")
-        self._database_url = urllib.parse.urlparse(db_url_)
-        self.conn = psycopg2.connect(
-            database=self._database_url.path[1:],
-            user=self._database_url.username,
-            password=self._database_url.password,
-            host=self._database_url.hostname,
-            port=self._database_url.port
-        )
-        self.cur = self.conn.cursor()
-
-    def close_connect(self):
-        self.cur.close()
-        self.conn.close()
+from modules.controldb import DatabaseControl
+from modules.exphantom import ScreenShot
 
 
 class MiyadaiDatabaseControl(DatabaseControl):
@@ -30,7 +13,7 @@ class MiyadaiDatabaseControl(DatabaseControl):
         super().__init__(os.environ["DATABASE_URL"])
 
     def first_insert_database_to_miyadai(self):
-        day = menu = url = None
+        _day = _menu = _url = None
 
         # URLの指定
         html = urllib.request.urlopen("http://gakumu.of.miyazaki-u.ac.jp/gakumu/allnews")
@@ -43,14 +26,24 @@ class MiyadaiDatabaseControl(DatabaseControl):
             for li in reversed(li_month.findAll('li')):
                 for span in li.findAll('span'):
                     if span.string is not None:
-                        day = span.string
+                        _day = span.string
                 for a in li.findAll('a'):
                     if a.string is not None:
-                        menu = a.string.strip()
-                        url = 'http://gakumu.of.miyazaki-u.ac.jp' + a.get('href')
-                self.cur.execute("INSERT INTO miyadai (days, title, url) VALUES (%s, %s, %s)", (day, menu, url))
+                        _menu = a.string.strip()
+                        _url = 'http://gakumu.of.miyazaki-u.ac.jp' + a.get('href')
+                self.cur.execute("INSERT INTO miyadai (days, title, url) VALUES (%s, %s, %s)", (_day, _menu, _url))
         self.conn.commit()
         return "success"
+
+    def first_insert_to_img_table(self):
+        self.cur.execute("SELECT count(*) FROM miyadai;")
+        col_count = self.cur.fetchone()
+        print(col_count)
+        self.cur.execute("SELECT url FROM miyadai ORDER BY id DESC;")
+        for r in range(col_count[0]):
+            b = self.cur.fetchone()
+            print(b[0])
+            self.screen_shot(b[0])
 
     def get_users(self):
         self.cur.execute("SELECT user_id FROM users")
@@ -153,25 +146,18 @@ class MiyadaiDatabaseControl(DatabaseControl):
                          (screen_url, psycopg2.Binary(pic)))
         self.conn.commit()
 
-    def first_insert_to_img_table(self):
-        self.cur.execute("SELECT count(*) FROM miyadai;")
-        col_count = self.cur.fetchone()
-        print(col_count)
-        self.cur.execute("SELECT url FROM miyadai ORDER BY id DESC;")
-        for r in range(col_count[0]):
-            b = self.cur.fetchone()
-            print(b[0])
-            self.screen_shot(b[0])
-
-    def open_image(self, send_url):
+    def open_image(self, send_url: str) -> bool:
         self.cur.execute("SELECT image FROM image_tbl WHERE url = %s", (send_url,))
-
         row = self.cur.fetchone()
-        pic = row[0]
+        if not row:
+            return False
 
+        pic = row[0]
         f = open('send_img.png', 'wb')
         f.write(pic)
         f.close()
+
+        return True
 
 
 if __name__ == "__main__":
@@ -184,6 +170,8 @@ if __name__ == "__main__":
     print(url)
     print(myzk.oshirase_print_once_only_media_url(
         "http://gakumu.of.miyazaki-u.ac.jp/gakumu/andsoon/andsoon/3428-20170613.html"))
-    print(myzk.oshirase_print_once_only_media_url("http://gakumu.of.miyazaki-u.ac.jp/gakumu/andsoon/andsoon/700-setuden.html"))
-    # print(myzk.oshirase_check())
+    print(myzk.oshirase_print_once_only_media_url(
+        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/andsoon/andsoon/700-setuden.html"))
+    print(myzk.open_image(url))
+    #    print(myzk.oshirase_check())
     myzk.close_connect()

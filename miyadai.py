@@ -1,9 +1,11 @@
-import urllib.request
-from bs4 import BeautifulSoup
-import psycopg2
-import urllib
 import os
-from exphantom import ScreenShot
+import urllib
+import urllib.request
+
+import psycopg2
+from bs4 import BeautifulSoup
+
+from modules.exphantom import ScreenShot
 
 
 def connect_psql():
