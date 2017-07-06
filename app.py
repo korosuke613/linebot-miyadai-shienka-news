@@ -96,16 +96,12 @@ def handle_text_message(event):
         if re.search(pattern, text):
             print_num = int(re.search(pattern, text).group(1))
             if 0 < print_num <= 100:
-                txt = myzk.oshirase_print_once(print_num-1)
-                print(txt)
-                txt = miyadai.oshirase_print_once(print_num-1)
                 isMiyadaiPrintOnce = True
             else:
-                txt = miyadai.oshirase_print(5)
                 send_carousel = carousel.get_carousel()
         else:
-            txt = miyadai.oshirase_print(5)
             send_carousel = carousel.get_carousel()
+        txt = myzk.oshirase_print_once(print_num - 1)
         isMiyadaiPrint = True
     elif "help" in text:
         txt = HELP
@@ -129,8 +125,8 @@ def handle_text_message(event):
             event.reply_token,
             send_carousel)
     if isMiyadaiPrintOnce:
-        news_url = miyadai.oshirase_print_once_only_url(print_num-1)
-        media_url = miyadai.oshirase_print_once_only_media_url(news_url)
+        news_url = myzk.oshirase_print_once_only_url(print_num-1)
+        media_url = myzk.oshirase_print_once_only_media_url(news_url)
         if media_url:
             line_bot_api.push_message(
                 event.source.user_id,
