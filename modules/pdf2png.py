@@ -14,7 +14,7 @@ def convert(pdf):
     pdf = pdf + "[0]"
 
     try:
-        check_call(["convert", "-density", "100", pdf, png])
+        check_call(["convert", "-background", "white", "-flatten", "-density", "144", pdf, png])
         print("Converted", "{0} converted".format(pdf))
     except (OSError, CalledProcessError) as e:
         print("ERROR", "ERROR: {0}".format(e))
@@ -30,4 +30,6 @@ def download_pdf(pdf_url, file_name):
 
 
 if __name__ == "__main__":
+    # download_pdf(
+    #    "http://gakumu.of.miyazaki-u.ac.jp/gakumu/images/campuslife/scholarship/H29/ooame20170705.pdf", "test.pdf")
     convert("./test.pdf")
