@@ -6,14 +6,13 @@ import miyadaidb
 from requests_oauthlib import OAuth1Session
 
 myzk = miyadaidb.MiyadaiDatabaseControl()
+CK = os.environ.get('TWITTER_CK')
+CS = os.environ.get('TWITTER_CS')
+AT = os.environ.get('TWITTER_AT')
+ATS = os.environ.get('TWITTER_ATS')
 
 
 def tweet(txt):
-    CK = os.environ.get('TWITTER_CK')
-    CS = os.environ.get('TWITTER_CS')
-    AT = os.environ.get('TWITTER_AT')
-    ATS = os.environ.get('TWITTER_ATS')
-
     twitter = OAuth1Session(CK, CS, AT, ATS)
 
     url = "https://api.twitter.com/1.1/statuses/update.json"
@@ -33,11 +32,6 @@ def tweet(txt):
 
 
 def tweet_with_media(tweet_msg, file_name):
-    CK = os.environ.get('TWITTER_CK')
-    CS = os.environ.get('TWITTER_CS')
-    AT = os.environ.get('TWITTER_AT')
-    ATS = os.environ.get('TWITTER_ATS')
-
     twitter = OAuth1Session(CK, CS, AT, ATS)
 
     url_media = "https://upload.twitter.com/1.1/media/upload.json"
@@ -68,11 +62,6 @@ def tweet_with_media(tweet_msg, file_name):
 
 
 def tweet_with_media_two(tweet_msg, file_name, file_name2):
-    CK = os.environ.get('TWITTER_CK')
-    CS = os.environ.get('TWITTER_CS')
-    AT = os.environ.get('TWITTER_AT')
-    ATS = os.environ.get('TWITTER_ATS')
-
     twitter = OAuth1Session(CK, CS, AT, ATS)
 
     url_media = "https://upload.twitter.com/1.1/media/upload.json"
@@ -126,7 +115,7 @@ def media_insert_to_database_two(news_url, media_url, pdf_media_url):
 
 
 if __name__ == "__main__":
-    # tweet("テスト用ツイート")
+    tweet("テスト用ツイート")
     # tweet_with_media("画像付きツイートテスト7", "screen.png")
     # print(tweet_with_media_two("画像付きツイートテスト", "screenshot_crop.png", "myzk.png"))
     pass
