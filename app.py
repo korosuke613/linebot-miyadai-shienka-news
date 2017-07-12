@@ -126,10 +126,16 @@ def handle_text_message(event):
     if isMiyadaiPrintOnce:
         news_url = myzk.oshirase_print_once_only_url(print_num-1)
         media_url = myzk.oshirase_print_once_only_media_url(news_url)
+        pdf_media_url = myzk.oshirase_print_once_only_pdf_media_url(news_url)
         if media_url:
             line_bot_api.push_message(
                 event.source.user_id,
                 ImageSendMessage(original_content_url=media_url, preview_image_url=media_url)
+            )
+        if pdf_media_url:
+            line_bot_api.push_message(
+                event.source.user_id,
+                ImageSendMessage(original_content_url=pdf_media_url, preview_image_url=pdf_media_url)
             )
     print(event.source.user_id, profile.display_name, profile.status_message)
     print("Message =", text)

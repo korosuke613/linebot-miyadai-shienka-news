@@ -96,6 +96,17 @@ class MiyadaiDatabaseControl(DatabaseControl):
             send = b[0]
         return send
 
+    def oshirase_print_once_only_pdf_media_url(self, news_url):
+        self.cur.execute("SELECT pdf_media_url FROM image_tbl WHERE url = %s", (news_url,))
+        b = self.cur.fetchone()
+        if not b:
+            send = 0
+        elif not b[0]:
+            send = 0
+        else:
+            send = b[0]
+        return send
+
     def oshirase_check(self):
         # URLの指定
         html = urllib.request.urlopen("http://gakumu.of.miyazaki-u.ac.jp/gakumu/allnews")
