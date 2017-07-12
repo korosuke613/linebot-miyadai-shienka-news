@@ -99,18 +99,13 @@ def tweet_with_media_two(tweet_msg, file_name, file_name2):
     media_id = json.loads(req_media.text)['media_id']
     media_id2 = json.loads(req_media2.text)['media_id']
 
-    print(media_id)
-    print(media_id2)
     media_ids = str(media_id) + ',' + str(media_id2)
-    print(media_ids)
 
     # Media ID を付加してテキストを投稿
     params = {'status': tweet_msg, "media_ids": [media_ids]}
     req_text = twitter.post(url_text, params=params)
     media_url = json.loads(req_text.text)['extended_entities']['media'][0]['media_url_https']
     media_url2 = json.loads(req_text.text)['extended_entities']['media'][1]['media_url_https']
-    print(media_url)
-    print(media_url2)
     # 再びレスポンスを確認
     if req_text.status_code != 200:
         print("テキストアップデート失敗: %s", req_text.text)
@@ -130,14 +125,8 @@ def media_insert_to_database_two(news_url, media_url, pdf_media_url):
     myzk.conn.commit()
 
 
-def return_test():
-    return "a", "b"
-
 if __name__ == "__main__":
     # tweet("テスト用ツイート")
     # tweet_with_media("画像付きツイートテスト7", "screen.png")
     # print(tweet_with_media_two("画像付きツイートテスト", "screenshot_crop.png", "myzk.png"))
-    ab = return_test()
-    print(ab[0])
-    print(ab[1])
     pass
